@@ -39,7 +39,8 @@ def score(context: ModelContext, **kwargs):
     predictions = TDGLMPredict(
         object=model,
         newdata=scaled_features.result,
-        id_column=entity_key
+        id_column=entity_key,
+        family = 'Binomial'
     )
 
     predictions_pdf = predictions.result.to_pandas(all_rows=True).rename(columns={"prediction": target_name}).astype(int)
