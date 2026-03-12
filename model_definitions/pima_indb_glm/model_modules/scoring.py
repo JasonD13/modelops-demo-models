@@ -34,13 +34,12 @@ def score(context: ModelContext, **kwargs):
         object=scaler,
         accumulate = entity_key
     )
-    
+
     print("Scoring")
     predictions = TDGLMPredict(
         object=model,
         newdata=scaled_features.result,
-        id_column=entity_key,
-        family = 'Binomial'
+        id_column=entity_key
     )
 
     predictions_pdf = predictions.result.to_pandas(all_rows=True).rename(columns={"prediction": target_name}).astype(int)
@@ -73,7 +72,7 @@ def score(context: ModelContext, **kwargs):
         index=False,
         if_exists="append"
     )
-    
+
     print("Saved predictions in Teradata")
 
     # calculate stats

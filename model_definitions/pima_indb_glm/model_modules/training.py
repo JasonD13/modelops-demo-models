@@ -34,7 +34,7 @@ def train(context: ModelContext, **kwargs):
     train_df = DataFrame.from_query(context.dataset_info.sql)
 
     print ("Scaling using InDB Functions...")
-    
+
     scaler = ScaleFit(
         data=train_df,
         target_columns = feature_names,
@@ -50,10 +50,10 @@ def train(context: ModelContext, **kwargs):
         object=scaler.output,
         accumulate = [target_name,entity_key]
     )
-    
+
     scaler.output.to_sql(f"scaler_${context.model_version}", if_exists="replace")
     print("Saved scaler")
-    
+
     print("Starting training...")
 
     model = GLM(
@@ -69,19 +69,19 @@ def train(context: ModelContext, **kwargs):
         batch_size = context.hyperparams["batch_size"],
         iter_num_no_change = context.hyperparams["iter_num_no_change"]
     )
-    
+
     model.result.to_sql(f"model_${context.model_version}", if_exists="replace")    
     print("Saved trained model")
 
     # Calculate feature importance and generate plot
     model_pdf = model.result.to_pandas()[['predictor','estimate']]
     predictor_dict = {}
-    
+
     for index, row in model_pdf.iterrows():
         if row['predictor'] in feature_names:
             value = row['estimate']
             predictor_dict[row['predictor']] = value
-    
+
     feature_importance = dict(sorted(predictor_dict.items(), key=lambda x: x[1], reverse=True))
     keys, values = zip(*feature_importance.items())
     norm_values = (values-np.min(values))/(np.max(values)-np.min(values))

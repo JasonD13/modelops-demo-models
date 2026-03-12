@@ -27,8 +27,8 @@ def plot_feature_importance(fi, img_filename):
     fig = plt.gcf()
     fig.savefig(img_filename, dpi=500)
     plt.clf()
-    
-    
+
+
 def plot_confusion_matrix(cf, img_filename):
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(7.5, 7.5))
@@ -43,7 +43,7 @@ def plot_confusion_matrix(cf, img_filename):
     fig.savefig(img_filename, dpi=500)
     plt.clf()
 
-    
+
 def plot_roc_curve(roc_out, img_filename):
     import matplotlib.pyplot as plt
     auc = roc_out.result.to_pandas().reset_index()['AUC'][0]
@@ -60,7 +60,7 @@ def plot_roc_curve(roc_out, img_filename):
     fig.savefig(img_filename, dpi=500)
     plt.clf()
 
-    
+
 def evaluate(context: ModelContext, **kwargs):
 
     aoa_create_context()
@@ -82,7 +82,7 @@ def evaluate(context: ModelContext, **kwargs):
         object=scaler,
         accumulate = [target_name,entity_key]
     )
-    
+
     print("Scoring")
     predictions = TDGLMPredict(
         object=model,
@@ -124,7 +124,7 @@ def evaluate(context: ModelContext, **kwargs):
 
     with open(f"{context.artifact_output_path}/metrics.json", "w+") as f:
         json.dump(evaluation, f)
-        
+
     cm = confusion_matrix(predicted_data.result.to_pandas()['HasDiabetes'], predicted_data.result.to_pandas()['prediction'])
     plot_confusion_matrix(cm, f"{context.artifact_output_path}/confusion_matrix")
 
@@ -140,12 +140,12 @@ def evaluate(context: ModelContext, **kwargs):
     # Calculate feature importance and generate plot
     model_pdf = model.to_pandas()[['predictor','estimate']]
     predictor_dict = {}
-    
+
     for index, row in model_pdf.iterrows():
         if row['predictor'] in feature_names:
             value = row['estimate']
             predictor_dict[row['predictor']] = value
-    
+
     feature_importance = dict(sorted(predictor_dict.items(), key=lambda x: x[1], reverse=True))
     keys, values = zip(*feature_importance.items())
     norm_values = (values-np.min(values))/(np.max(values)-np.min(values))
