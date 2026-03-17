@@ -25,7 +25,7 @@ def train(context: ModelContext, **kwargs):
 
     feature_names = context.dataset_info.feature_names
     target_name = context.dataset_info.target_names[0]
-    
+
     # read training dataset from Teradata and convert to pandas
     check_java()
     h2o.init()
@@ -36,7 +36,7 @@ def train(context: ModelContext, **kwargs):
     train_hdf[target_name] = train_hdf[target_name].asfactor()
 
     print("Starting training...")
-  
+
     # Execute AutoML on training data
     aml = H2OAutoML(max_models=context.hyperparams['max_models'], seed=context.hyperparams['seed'])
     aml.train(x=feature_names, y=target_name, training_frame=train_hdf)

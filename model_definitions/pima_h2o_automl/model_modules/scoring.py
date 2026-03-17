@@ -32,7 +32,7 @@ def score(context: ModelContext, **kwargs):
 
     # store the predictions
     predictions_df = h2o.result
-    
+
     # add job_id column so we know which execution this is from if appended to predictions table
     predictions_df = predictions_df.assign(job_id=context.job_id)
     cols = {}
@@ -47,7 +47,7 @@ def score(context: ModelContext, **kwargs):
                 if_exists="append")
 
     print("Saved predictions in Teradata")
-    
+
     # calculate stats
     predictions_df = DataFrame.from_query(f"""
         SELECT 
