@@ -44,7 +44,7 @@ def score(context: ModelContext, **kwargs):
                 schema_name=context.dataset_info.predictions_database,
                 table_name=context.dataset_info.predictions_table,
                 index=False,
-                if_exists="append")
+                if_exists="replace")
 
     print("Saved predictions in Teradata")
 
