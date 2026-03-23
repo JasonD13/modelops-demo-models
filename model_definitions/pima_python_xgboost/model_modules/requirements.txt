@@ -1,4 +1,4 @@
-xgboost==0.90
+xgboost==2.0.3
 scikit-learn==1.6.1
 teradataml==20.0.0.9
 nyoka==4.3.0
